@@ -5,8 +5,8 @@ interface Quote {
   quote: string;
 }
 
-let currentPage = 1;
 const quotesPerPage = 6;
+let currentPage = parseInt(localStorage.getItem('currentPage') || '1', 10);
 
 function copyToClipboard(text: string, button: HTMLButtonElement) {
   navigator.clipboard.writeText(text).then(() => {
@@ -21,42 +21,61 @@ function renderQuotes(page: number) {
   const container = document.getElementById('quotes-container');
   const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
   const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+  const loadingSpinner = document.getElementById('loading-spinner');
+  const darkModeToggle = document.getElementById('toggle-hide');
 
-  if (!container) return;
+  if (!container || !loadingSpinner || !prevBtn || !nextBtn || !darkModeToggle) return;
 
-  container.innerHTML = '';
-  const startIndex = (page - 1) * quotesPerPage;
-  const endIndex = startIndex + quotesPerPage;
+  loadingSpinner.classList.remove('is-hidden');
+  container.classList.add('is-hidden');
+  prevBtn.classList.add('is-hidden');
+  nextBtn.classList.add('is-hidden');
+  darkModeToggle.classList.add('is-hidden');
 
-  const quotesToRender = quotes.slice(startIndex, endIndex);
-  quotesToRender.forEach((quote: Quote) => {
-    const card = document.createElement('div');
-    card.className = 'column is-half';
+  setTimeout(() => {
+    container.innerHTML = '';
+    const startIndex = (page - 1) * quotesPerPage;
+    const endIndex = startIndex + quotesPerPage;
 
-    card.innerHTML = `
-      <div class="card">
-        <div class="card-content">
-          <p class="quote-text">${quote.quote}</p>
-          <button class="button is-small is-primary copy-btn mt-3">
-            <i class="fas fa-copy"></i>
-          </button>
+    const quotesToRender = quotes.slice(startIndex, endIndex);
+    quotesToRender.forEach((quote: Quote) => {
+      const card = document.createElement('div');
+      card.className = 'column is-half';
+
+      card.innerHTML = `
+        <div class="card">
+          <div class="card-content">
+            <p class="quote-text">${quote.quote}</p>
+            <button class="button is-small is-primary copy-btn mt-3">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
         </div>
-      </div>
-    `;
+      `;
 
-    const copyBtn = card.querySelector('.copy-btn') as HTMLButtonElement;
-    copyBtn.addEventListener('click', () => copyToClipboard(quote.quote, copyBtn));
+      const copyBtn = card.querySelector('.copy-btn') as HTMLButtonElement;
+      copyBtn.addEventListener('click', () => copyToClipboard(quote.quote, copyBtn));
 
-    container.appendChild(card);
-  });
+      container.appendChild(card);
+    });
 
-  const totalPages = Math.ceil(quotes.length / quotesPerPage);
-  if (totalPages <= 1) {
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
-  } else {
-    renderPagination(page, totalPages);
-  }
+    const totalPages = Math.ceil(quotes.length / quotesPerPage);
+    if (totalPages <= 1) {
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+    } else {
+      renderPagination(page, totalPages);
+    }
+
+    loadingSpinner.classList.add('is-hidden');
+    container.classList.remove('is-hidden');
+    prevBtn.classList.remove('is-hidden');
+    nextBtn.classList.remove('is-hidden');
+    darkModeToggle.classList.remove('is-hidden');
+
+    localStorage.setItem('currentPage', page.toString());
+  
+  }, 500);
 }
 
 function renderPagination(currentPage: number, totalPages: number) {

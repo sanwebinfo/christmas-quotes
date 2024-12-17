@@ -19,21 +19,21 @@
   <section class="section">
     <div class="container">
       <h1 class="title has-text-centered is-size-5">🎄 Christmas Quotes 🎅</h1>
-      <div id="loading-spinner" class="spinner is-hidden">
-        <div class="spinner-border"></div>
-      </div>
-      <br>
-      <div id="quotes-container" class="columns is-multiline is-centered"></div>
-      <div id="pagination" class="pagination-container">
-        <button id="prev-btn" class="button is-link is-small">Previous</button>
-        <button id="next-btn" class="button is-link is-small">Next</button>
-      </div>
-      <div class="toggle-container mt-6" id="toggle-hide">
+      <div class="toggle-container" id="toggle-hide">
         <label class="toggle-switch">
           <input type="checkbox" id="dark-mode-toggle">
           <span class="slider"></span>
         </label>
-      </div>      
+      </div>
+      <div id="loading-spinner" class="spinner is-hidden">
+        <div class="spinner-border"></div>
+      </div>
+      <br>
+      <div id="quotes-container"></div>
+      <div id="pagination" class="pagination-container">
+        <button id="prev-btn" class="button is-link is-small">Previous</button>
+        <button id="next-btn" class="button is-link is-small">Next</button>
+      </div>  
     </div>
   </section>
   <script type="module" src="app.ts"></script>

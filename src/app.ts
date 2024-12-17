@@ -40,17 +40,15 @@ function renderQuotes(page: number) {
     const quotesToRender = quotes.slice(startIndex, endIndex);
     quotesToRender.forEach((quote: Quote) => {
       const card = document.createElement('div');
-      card.className = 'column is-half';
+      card.className = 'box';
 
       card.innerHTML = `
-        <div class="card">
-          <div class="card-content">
+          <div class="content">
             <p class="quote-text">${quote.quote}</p>
             <button class="button is-small is-primary copy-btn mt-3">
               <i class="fas fa-copy"></i>
             </button>
           </div>
-        </div>
       `;
 
       const copyBtn = card.querySelector('.copy-btn') as HTMLButtonElement;
